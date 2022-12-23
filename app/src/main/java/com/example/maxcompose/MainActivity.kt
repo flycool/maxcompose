@@ -2,6 +2,7 @@ package com.example.maxcompose
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.animation.OvershootInterpolator
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -23,19 +24,22 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.*
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -72,6 +76,9 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.PI
+import kotlin.math.atan2
+import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -702,8 +709,125 @@ private fun DropDown(
 
 @Destination
 @Composable
+fun MusicKnob13() {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .border(1.dp, Color.Cyan, RoundedCornerShape(10.dp))
+                .padding(30.dp)
+        ) {
+            var volume by remember { mutableStateOf(0f) }
+            val barCount = 20
+            MusicKnob(
+                modifier = Modifier.size(100.dp),
+                onValueChange = {
+                    volume = it
+                },
+            )
+            Spacer(modifier = Modifier.width(20.dp))
+            VolumeBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(30.dp),
+                activityBar = (barCount * volume).roundToInt(),
+                barCount = barCount
+            )
+        }
+    }
+}
+
+@Composable
+private fun VolumeBar(
+    modifier: Modifier = Modifier,
+    activityBar: Int = 0,
+    barCount: Int = 10,
+) {
+    BoxWithConstraints(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        val barWidth = remember {
+            constraints.maxWidth / (2f * barCount)
+        }
+        Canvas(modifier = modifier) {
+            for (i in 0 until barCount) {
+                drawRoundRect(
+                    color = if (i in 0 until activityBar) Color.Green else Color.DarkGray,
+                    topLeft = Offset(i * barWidth * 2f + barWidth / 2f, 0f),
+                    size = Size(barWidth, constraints.maxHeight.toFloat()),
+                    cornerRadius = CornerRadius(0f)
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun MusicKnob(
+    modifier: Modifier = Modifier,
+    limitingAngle: Float = 25f,
+    onValueChange: (Float) -> Unit,
+) {
+    var rotation by remember { mutableStateOf(limitingAngle) }
+    var centerX by remember { mutableStateOf(0f) }
+    var centerY by remember { mutableStateOf(0f) }
+    var touchX by remember { mutableStateOf(0f) }
+    var touchY by remember { mutableStateOf(0f) }
+
+    Image(
+        painter = painterResource(id = R.drawable.profile_pic),
+        contentDescription = null,
+        modifier = modifier
+            .fillMaxSize()
+            .onGloballyPositioned {
+                val windowBounds = it.boundsInWindow()
+                centerX = windowBounds.size.width / 2
+                centerY = windowBounds.size.height / 2
+            }
+            .pointerInteropFilter { event ->
+                touchX = event.x
+                touchY = event.y
+                val angle = -atan2(centerX - touchX, centerY - touchY) * (180f / PI).toFloat()
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN,
+                    MotionEvent.ACTION_MOVE -> {
+                        if (angle !in -limitingAngle..limitingAngle) {
+                            val fixedAngle = if (angle in -180f..-limitingAngle) {
+                                360f + angle
+                            } else {
+                                angle
+                            }
+                            rotation = fixedAngle
+
+                            val percent = (fixedAngle - limitingAngle) / (360 - 2 * limitingAngle)
+                            onValueChange(percent)
+                            true
+                        } else false
+                    }
+                    else -> false
+                }
+            }
+            .rotate(rotation)
+    )
+}
+
+
+@Destination
+@Composable
 fun CircularProgressBar12() {
-    CircularProgressBar(percentage = 0.7f, number = 100)
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressBar(percentage = 0.7f, number = 100)
+    }
 }
 
 
