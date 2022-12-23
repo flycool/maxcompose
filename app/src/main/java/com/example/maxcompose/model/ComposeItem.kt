@@ -11,6 +11,7 @@ val composeItemList = listOf(
     ComposeItem("LazyVerticalGrid32", LazyVerticalGrid32Destination),
     ComposeItem("NavigationDrawer31", NavigationDrawer31Destination),
     ComposeItem("BottomSheet30", BottomSheet30Destination),
+    ComposeItem("PageList29", PageList29Destination),
     ComposeItem("MotionLayout28", MotionLayout28Destination),
     ComposeItem("LayoutForAllScreenSize27", LayoutForAllScreenSize27Destination),
     ComposeItem("MigrateToCompose24", MigrateToCompose24Destination),

@@ -48,6 +48,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.*
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -57,6 +58,7 @@ import com.example.maxcompose.model.bottomItems
 import com.example.maxcompose.model.composeItemList
 import com.example.maxcompose.navigation.bottom.NavigationBottomBar
 import com.example.maxcompose.navigation.bottom.NavigationForBottomSheet
+import com.example.maxcompose.page.PageViewModel
 import com.example.maxcompose.ui.theme.MaxcomposeTheme
 import com.example.maxcompose.util.WindowInfo
 import com.example.maxcompose.util.isPermanentlyDenied
@@ -188,6 +190,58 @@ fun BottomSheet30() {
 
     }
 }
+
+@Destination
+@Composable
+fun PageList29() {
+    val viewModel = viewModel<PageViewModel>()
+    val state = viewModel.state
+    var reIndex by remember {
+        mutableStateOf(0)
+    }
+    if (reIndex >= state.items.size - 1 && !state.endReached && !state.isLoading) {
+        viewModel.loadNextItems()
+    }
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        itemsIndexed(state.items) { index, item ->
+            reIndex = index
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+            ) {
+                Text(
+                    text = item.title,
+                    fontSize = 20.sp,
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = item.description)
+            }
+        }
+        if (state.isLoading) {
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+        }
+    }
+    Button(onClick = {
+        viewModel.reset()
+    }) {
+        Text(text = "reset")
+    }
+}
+
 
 @Destination
 @Composable
