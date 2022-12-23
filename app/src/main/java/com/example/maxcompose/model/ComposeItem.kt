@@ -21,8 +21,8 @@ val composeItemList = listOf(
     ComposeItem("Navigation19", Navigation19Destination),
     ComposeItem("DropDown16", DropDown16Destination),
     ComposeItem("CircularProgressBar12", CircularProgressBar12Destination),
-    ComposeItem("Home11", Home11Destination),
-    ComposeItem("Home9", Home9Destination),
-    ComposeItem("Home8", Home8Destination),
-    ComposeItem("Home7", Home7Destination),
+    ComposeItem("SimpleAnimation11", SimpleAnimation11Destination),
+    ComposeItem("ConstraintLayout9", ConstraintLayout9Destination),
+    ComposeItem("List8", List8Destination),
+    ComposeItem("SimpleUI7", SimpleUI7Destination),
 )

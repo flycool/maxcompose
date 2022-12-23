@@ -701,7 +701,7 @@ private fun CircularProgressBar(
 
 @Destination
 @Composable
-fun Home11() {
+fun SimpleAnimation11() {
     var sizeState by remember { mutableStateOf(200.dp) }
     val size by animateDpAsState(
         targetValue = sizeState,
@@ -731,7 +731,7 @@ fun Home11() {
 
 @Destination
 @Composable
-fun Home9() {
+fun ConstraintLayout9() {
     val constraintSet = ConstraintSet {
         val greenbox = createRefFor("greenbox")
         val redbox = createRefFor("redbox")
@@ -770,7 +770,7 @@ fun Home9() {
 
 @Destination
 @Composable
-fun Home8() {
+fun List8() {
     LazyColumn {
         items(
             listOf("this", "is", "jetpack", "Compose")
@@ -791,7 +791,7 @@ fun Home8() {
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Destination
 @Composable
-fun Home7() {
+fun SimpleUI7() {
     val scaffoldState = rememberScaffoldState()
     var textFieldState by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
@@ -834,7 +834,7 @@ fun Home7() {
 @Preview
 @Composable
 fun HomePreview() {
-    Home7()
+    SimpleUI7()
 }
 
 
