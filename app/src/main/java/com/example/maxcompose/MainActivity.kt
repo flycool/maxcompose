@@ -796,7 +796,9 @@ private fun MusicKnob(
                 touchY = event.y
                 val angle = -atan2(centerX - touchX, centerY - touchY) * (180f / PI).toFloat()
                 when (event.action) {
-                    MotionEvent.ACTION_DOWN,
+                    MotionEvent.ACTION_DOWN -> {
+                        true
+                    }
                     MotionEvent.ACTION_MOVE -> {
                         if (angle !in -limitingAngle..limitingAngle) {
                             val fixedAngle = if (angle in -180f..-limitingAngle) {
