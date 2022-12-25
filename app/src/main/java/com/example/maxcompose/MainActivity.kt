@@ -36,10 +36,8 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInteropFilter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.*
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -76,9 +74,7 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.PI
-import kotlin.math.atan2
-import kotlin.math.roundToInt
+import kotlin.math.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,16 +98,14 @@ class MainActivity : ComponentActivity() {
 fun Home(navigator: DestinationsNavigator) {
     LazyColumn() {
         items(composeItemList) { item ->
-            Text(
-                text = item.name,
+            Text(text = item.name,
                 fontSize = 24.sp,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
                     .clickable {
                         navigator.navigate(item.destination)
-                    }
-            )
+                    })
         }
     }
 }
@@ -221,9 +215,7 @@ fun PageList29() {
                     .padding(16.dp),
             ) {
                 Text(
-                    text = item.title,
-                    fontSize = 20.sp,
-                    color = Color.Black
+                    text = item.title, fontSize = 20.sp, color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = item.description)
@@ -260,11 +252,9 @@ fun MotionLayout28() {
         ProfileHeader(progress = progress)
         Spacer(modifier = Modifier.height(16.dp))
         Slider(
-            value = progress,
-            onValueChange = {
+            value = progress, onValueChange = {
                 progress = it
-            },
-            modifier = Modifier.padding(
+            }, modifier = Modifier.padding(
                 horizontal = 32.dp
             )
         )
@@ -297,17 +287,14 @@ private fun ProfileHeader(progress: Float) {
             modifier = Modifier
                 .clip(CircleShape)
                 .border(
-                    width = 2.dp,
-                    color = changeColor,
-                    shape = CircleShape
+                    width = 2.dp, color = changeColor, shape = CircleShape
                 )
                 .layoutId("profile_pic")
         )
         Text(
             text = "max name",
             fontSize = 24.sp,
-            modifier = Modifier
-                .layoutId("username"),
+            modifier = Modifier.layoutId("username"),
             color = changeColor,
         )
     }
@@ -319,8 +306,7 @@ fun LayoutForAllScreenSize27() {
     val windowInfo = rememberWindowInfo()
     if (windowInfo.screenWidthType == WindowInfo.WindowInfoType.Compact) {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             items(10) {
                 Text(
@@ -350,7 +336,8 @@ fun LayoutForAllScreenSize27() {
             ) {
                 items(10) {
                     Text(
-                        text = "item $it", modifier = Modifier
+                        text = "item $it",
+                        modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.Cyan)
                             .padding(16.dp)
@@ -364,7 +351,8 @@ fun LayoutForAllScreenSize27() {
             ) {
                 items(10) {
                     Text(
-                        text = "item $it", modifier = Modifier
+                        text = "item $it",
+                        modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.Green)
                             .padding(16.dp)
@@ -424,8 +412,7 @@ fun ComposePermission23() {
                         perm.hasPermission -> Text(text = "Camera permission granted")
                         perm.shouldShowRationale -> Text(text = "Camera permission show Rationale")
                         perm.isPermanentlyDenied() -> Text(
-                            text = "Camera permission was permanently denied." +
-                                    "you can enable it in th app settings"
+                            text = "Camera permission was permanently denied." + "you can enable it in th app settings"
                         )
                     }
                 }
@@ -434,8 +421,7 @@ fun ComposePermission23() {
                         perm.hasPermission -> Text(text = "Record audio permission granted")
                         perm.shouldShowRationale -> Text(text = "Record audio permission show Rationale")
                         perm.isPermanentlyDenied() -> Text(
-                            text = "Record audio was permanently denied." +
-                                    "you can enable it in th app settings"
+                            text = "Record audio was permanently denied." + "you can enable it in th app settings"
                         )
                     }
                 }
@@ -709,11 +695,123 @@ private fun DropDown(
 
 @Destination
 @Composable
-fun MusicKnob13() {
+fun Timer15() {
     Box(
-        contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xff101010)),
+        contentAlignment = Alignment.Center,
+        ) {
+        Timer(
+            totalTime = 5 * 1000L,
+            handleColor = Color.Green,
+            inactiveBarColor = Color.DarkGray,
+            activityBar = Color(0xff37b900),
+            modifier = Modifier.size(200.dp)
+        )
+    }
+
+}
+
+@Composable
+private fun Timer(
+    totalTime: Long,
+    handleColor: Color,
+    inactiveBarColor: Color,
+    activityBar: Color,
+    initialValue: Float = 1f,
+    strokeWidth: Dp = 5.dp,
+    modifier: Modifier = Modifier,
+) {
+    var isRunning by remember { mutableStateOf(false) }
+    var size by remember { mutableStateOf(IntSize.Zero) }
+    var value by remember { mutableStateOf(initialValue) }
+    var currentTime by remember { mutableStateOf(totalTime) }
+
+    LaunchedEffect(key1 = currentTime, key2 = isRunning) {
+        if (currentTime > 0 && isRunning) {
+            delay(100L)
+            currentTime -= 100L
+            value = currentTime / totalTime.toFloat()
+        }
+    }
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.onSizeChanged {
+            size = it
+        },
+    ) {
+        Canvas(modifier = modifier) {
+            drawArc(
+                color = inactiveBarColor,
+                startAngle = -215f,
+                sweepAngle = 250f,
+                useCenter = false,
+                size = Size(size.width.toFloat(), size.height.toFloat()),
+                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
+            )
+            drawArc(
+                color = activityBar,
+                startAngle = -215f,
+                sweepAngle = 250f * value,
+                useCenter = false,
+                size = Size(size.width.toFloat(), size.height.toFloat()),
+                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
+            )
+
+            val center = Offset(size.width / 2f, size.height / 2f)
+            val dotAngle = (250f * value + 145f) * (PI / 180f).toFloat()
+            val r = size.width / 2f
+            val ax = r * cos(dotAngle)
+            val by = r * sin(dotAngle)
+            val dotOffset = Offset(center.x + ax, center.y + by)
+
+            drawPoints(
+                listOf(
+                    dotOffset
+                ),
+                pointMode = PointMode.Points,
+                color = handleColor,
+                strokeWidth = (strokeWidth * 3f).toPx(),
+                cap = StrokeCap.Round
+            )
+        }
+        Text(
+            text = (currentTime / 1000L).toString(),
+            fontSize = 44.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Bold
+        )
+        Button(
+            onClick = {
+                if (currentTime <= 0L) {
+                    currentTime = totalTime
+                    isRunning = true
+                } else {
+                    isRunning = !isRunning
+                }
+            },
+            modifier = Modifier.align(Alignment.BottomCenter),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = if (!isRunning || currentTime <= 0) Color.Green else Color.Red
+            )
+        ) {
+            Text(
+                text = if (isRunning && currentTime > 0L) "Stop"
+                else if (!isRunning && currentTime >= 0L) "Start"
+                else "Restart"
+            )
+        }
+    }
+}
+
+
+@Destination
+@Composable
+fun MusicKnob13() {
+    Box(
+        contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -749,8 +847,7 @@ private fun VolumeBar(
     barCount: Int = 10,
 ) {
     BoxWithConstraints(
-        modifier = modifier,
-        contentAlignment = Alignment.Center
+        modifier = modifier, contentAlignment = Alignment.Center
     ) {
         val barWidth = remember {
             constraints.maxWidth / (2f * barCount)
@@ -781,8 +878,7 @@ private fun MusicKnob(
     var touchX by remember { mutableStateOf(0f) }
     var touchY by remember { mutableStateOf(0f) }
 
-    Image(
-        painter = painterResource(id = R.drawable.profile_pic),
+    Image(painter = painterResource(id = R.drawable.profile_pic),
         contentDescription = null,
         modifier = modifier
             .fillMaxSize()
@@ -816,8 +912,7 @@ private fun MusicKnob(
                     else -> false
                 }
             }
-            .rotate(rotation)
-    )
+            .rotate(rotation))
 }
 
 
@@ -825,8 +920,7 @@ private fun MusicKnob(
 @Composable
 fun CircularProgressBar12() {
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
         CircularProgressBar(percentage = 0.7f, number = 100)
     }

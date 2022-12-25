@@ -21,6 +21,7 @@ val composeItemList = listOf(
     ComposeItem("BottomSheetWithBadge20", BottomSheetWithBadge20Destination),
     ComposeItem("Navigation19", Navigation19Destination),
     ComposeItem("DropDown16", DropDown16Destination),
+    ComposeItem("Timer15", Timer15Destination),
     ComposeItem("MusicKnob13", MusicKnob13Destination),
     ComposeItem("CircularProgressBar12", CircularProgressBar12Destination),
     ComposeItem("SimpleAnimation11", SimpleAnimation11Destination),
