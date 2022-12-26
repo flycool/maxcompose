@@ -22,6 +22,7 @@ val composeItemList = listOf(
     ComposeItem("Navigation19", Navigation19Destination),
     ComposeItem("DropDown16", DropDown16Destination),
     ComposeItem("Timer15", Timer15Destination),
+    ComposeItem("MeditationScreen14", MeditationScreen14Destination),
     ComposeItem("MusicKnob13", MusicKnob13Destination),
     ComposeItem("CircularProgressBar12", CircularProgressBar12Destination),
     ComposeItem("SimpleAnimation11", SimpleAnimation11Destination),
