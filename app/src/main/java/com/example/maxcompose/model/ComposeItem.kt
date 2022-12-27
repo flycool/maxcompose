@@ -20,6 +20,7 @@ val composeItemList = listOf(
     ComposeItem("MultiLayerParallaxScroll21", MultiLayerParallaxScroll21Destination),
     ComposeItem("BottomSheetWithBadge20", BottomSheetWithBadge20Destination),
     ComposeItem("Navigation19", Navigation19Destination),
+    ComposeItem("ProfileScreen17", ProfileScreen17Destination),
     ComposeItem("DropDown16", DropDown16Destination),
     ComposeItem("Timer15", Timer15Destination),
     ComposeItem("MeditationScreen14", MeditationScreen14Destination),
