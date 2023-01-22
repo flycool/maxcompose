@@ -1,6 +1,6 @@
 package com.example.maxcompose.model
 
-import com.example.maxcompose.destinations.*
+import com.example.destinations.*
 
 data class ComposeItem(
     val name: String,
@@ -30,4 +30,12 @@ val composeItemList = listOf(
     ComposeItem("ConstraintLayout9", ConstraintLayout9Destination),
     ComposeItem("List8", List8Destination),
     ComposeItem("SimpleUI7", SimpleUI7Destination),
+)
+
+val composeItemList2 = listOf(
+    ComposeItem("AutoReSizedText", AutoReSizedTextDestination),
+    ComposeItem("CustomSnackBar", CustomSnackBarDestination),
+    ComposeItem("HyperLink", HyperLinkDestination),
+    ComposeItem("OneTimePasswordView", OneTimePasswordViewDestination),
+    ComposeItem("SetWallpaper", SetWallpaperDestination),
 )

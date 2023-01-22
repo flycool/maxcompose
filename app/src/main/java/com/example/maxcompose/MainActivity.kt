@@ -7,6 +7,7 @@ import android.view.animation.OvershootInterpolator
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
@@ -42,6 +43,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,12 +54,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.maxcompose.model.ListItem
-import com.example.maxcompose.model.bottomItems
-import com.example.maxcompose.model.composeItemList
+import androidx.navigation.plusAssign
+import com.example.NavGraphs
+import com.example.maxcompose.meditation.BottomItem
+import com.example.maxcompose.model.*
 import com.example.maxcompose.navigation.bottom.NavigationBottomBar
 import com.example.maxcompose.navigation.bottom.NavigationForBottomSheet
 import com.example.maxcompose.page.PageViewModel
@@ -66,17 +73,23 @@ import com.example.maxcompose.util.WindowInfo
 import com.example.maxcompose.util.isPermanentlyDenied
 import com.example.maxcompose.util.rememberWindowInfo
 import com.example.maxcompose.util.toDp
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.navigateTo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.*
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -85,9 +98,41 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     color = MaterialTheme.colors.background, modifier = Modifier.fillMaxSize()
                 ) {
-                    DestinationsNavHost(navGraph = NavGraphs.root)
+                    val navController = rememberNavController()
+                    Scaffold(bottomBar = {
+                        BottomBar(navController = navController)
+                    }) {
+
+                        DestinationsNavHost(
+                            navGraph = NavGraphs.root,
+                            navController = navController
+                        )
+                    }
+
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun BottomBar(
+    navController: NavController
+) {
+    BottomNavigation {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
+        BottomBarDestination.values().forEach { destination ->
+            BottomNavigationItem(
+                icon = {},
+                label = { Text(text = destination.label) },
+                selected = currentDestination?.hierarchy?.any { it.label == destination.label } == true,
+                onClick = {
+                    navController.navigateTo(destination.direction) {
+                        launchSingleTop = true
+                    }
+                }
+            )
         }
     }
 }
@@ -95,9 +140,26 @@ class MainActivity : ComponentActivity() {
 @RootNavGraph(start = true)
 @Destination
 @Composable
-fun Home(navigator: DestinationsNavigator) {
+fun Compose1Home(navigator: DestinationsNavigator) {
     LazyColumn() {
         items(composeItemList) { item ->
+            Text(text = item.name,
+                fontSize = 24.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .clickable {
+                        navigator.navigate(item.destination)
+                    })
+        }
+    }
+}
+
+@Destination
+@Composable
+fun Compose2Home(navigator: DestinationsNavigator) {
+    LazyColumn() {
+        items(composeItemList2) { item ->
             Text(text = item.name,
                 fontSize = 24.sp,
                 modifier = Modifier
@@ -701,7 +763,7 @@ fun Timer15() {
             .fillMaxSize()
             .background(Color(0xff101010)),
         contentAlignment = Alignment.Center,
-        ) {
+    ) {
         Timer(
             totalTime = 5 * 1000L,
             handleColor = Color.Green,
