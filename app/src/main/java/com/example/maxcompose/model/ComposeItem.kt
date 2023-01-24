@@ -33,6 +33,7 @@ val composeItemList = listOf(
 )
 
 val composeItemList2 = listOf(
+    ComposeItem("PipMode", PipModeDestination),
     ComposeItem("ShimmerListItem", ShimmerListItemDestination),
     ComposeItem("AutoReSizedText", AutoReSizedTextDestination),
     ComposeItem("CustomSnackBar", CustomSnackBarDestination),

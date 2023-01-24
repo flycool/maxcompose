@@ -1,6 +1,10 @@
 package com.example.maxcompose
 
 import android.annotation.SuppressLint
+import android.app.PictureInPictureParams
+import android.content.pm.PackageManager
+import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,6 +25,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.NavGraphs
+import com.example.maxcompose.compose1.updatePipParams
 import com.example.maxcompose.model.*
 import com.example.maxcompose.ui.theme.MaxcomposeTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -52,6 +57,28 @@ class MainActivity : ComponentActivity() {
                     }
 
                 }
+            }
+        }
+    }
+
+    private val isSupportPip by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            packageManager.hasSystemFeature(
+                PackageManager.FEATURE_PICTURE_IN_PICTURE
+            )
+        } else {
+            false
+        }
+    }
+
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if(!isSupportPip) return
+
+        updatePipParams(applicationContext)?.let { param ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                enterPictureInPictureMode(param)
             }
         }
     }
