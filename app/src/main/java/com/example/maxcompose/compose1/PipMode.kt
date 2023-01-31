@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.Rational
 import android.widget.VideoView
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,7 +21,9 @@ import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
+import com.example.maxcompose.MainActivity
 import com.example.maxcompose.R
+import com.example.maxcompose.viewmodel.PipModeTimeViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination
@@ -47,7 +50,6 @@ fun PipMode() {
 }
 
 private var videoViewBounds = Rect()
-
 class MyReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         println("clicked on PIP action")

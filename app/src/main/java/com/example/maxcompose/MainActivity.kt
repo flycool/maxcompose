@@ -2,12 +2,17 @@ package com.example.maxcompose
 
 import android.annotation.SuppressLint
 import android.app.PictureInPictureParams
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -28,6 +33,7 @@ import com.example.NavGraphs
 import com.example.maxcompose.compose1.updatePipParams
 import com.example.maxcompose.model.*
 import com.example.maxcompose.ui.theme.MaxcomposeTheme
+import com.example.maxcompose.viewmodel.PipModeTimeViewModel
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -36,6 +42,7 @@ import com.ramcosta.composedestinations.navigation.navigateTo
 import kotlin.math.*
 
 class MainActivity : ComponentActivity() {
+
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +78,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
         if(!isSupportPip) return
@@ -83,6 +89,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 @Composable
 fun BottomBar(
