@@ -1,4 +1,4 @@
-package com.example.maxcompose.compose1
+package com.example.maxcompose.compose2
 
 import android.app.PendingIntent
 import android.app.PictureInPictureParams
