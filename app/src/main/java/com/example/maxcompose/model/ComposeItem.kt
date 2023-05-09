@@ -33,6 +33,8 @@ val composeItemList = listOf(
 )
 
 val composeItemList2 = listOf(
+    ComposeItem("FlowRowContent", FlowRowContentDestination),
+    ComposeItem("DropDownMenu", DropDownMenuDestination),
     ComposeItem("AnimatedCounter", AnimatedCounterDestination),
     ComposeItem("PipMode", PipModeDestination),
     ComposeItem("ShimmerListItem", ShimmerListItemDestination),
