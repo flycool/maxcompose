@@ -33,6 +33,9 @@ val composeItemList = listOf(
 )
 
 val composeItemList2 = listOf(
+    ComposeItem("StaggeredGrid", StaggeredGridDestination),
+    ComposeItem("Downloader", DownloaderDestination),
+    ComposeItem("NestedScrolling", NestedScrollingDestination),
     ComposeItem("FlowRowContent", FlowRowContentDestination),
     ComposeItem("DropDownMenu", DropDownMenuDestination),
     ComposeItem("AnimatedCounter", AnimatedCounterDestination),
