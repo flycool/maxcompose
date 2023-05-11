@@ -146,7 +146,7 @@ fun BottomSheet30() {
                     }
                 }
             }) {
-                Text(text = "bottom sheet ${sheetState.progress.fraction}")
+                Text(text = "bottom sheet ${sheetState.progress.dp}")
             }
         }
 

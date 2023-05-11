@@ -33,7 +33,7 @@ fun StaggeredGrid() {
     }
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Adaptive(100.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalItemSpacing = 16.dp,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(10.dp)
     ) {

@@ -10,6 +10,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -18,11 +19,15 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.compose.*
+import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.NavGraphs
+import com.example.maxcompose.compose2.AudioRecorder
+import com.example.maxcompose.compose2.audiorecorder.AndroidAudioPlayer
+import com.example.maxcompose.compose2.audiorecorder.AndroidAudioRecorder
 import com.example.maxcompose.compose2.updatePipParams
 import com.example.maxcompose.model.*
 import com.example.maxcompose.ui.theme.MaxcomposeTheme
@@ -38,6 +43,15 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                android.Manifest.permission.RECORD_AUDIO,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ),
+            0
+        )
         setContent {
             MaxcomposeTheme {
                 // A surface container using the 'background' color from the theme
@@ -54,7 +68,6 @@ class MainActivity : ComponentActivity() {
                             navController = navController
                         )
                     }
-
                 }
             }
         }
@@ -72,7 +85,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        if(!isSupportPip) return
+        if (!isSupportPip) return
 
         updatePipParams(applicationContext)?.let { param ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

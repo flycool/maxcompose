@@ -33,6 +33,11 @@ val composeItemList = listOf(
 )
 
 val composeItemList2 = listOf(
+//    ComposeItem("AudioRecorder", AudioRecorderDestination),//to fix
+
+
+    ComposeItem("HorizontalPagerSample", HorizontalPagerSampleDestination),
+    ComposeItem("Search", SearchDestination),
     ComposeItem("StaggeredGrid", StaggeredGridDestination),
     ComposeItem("Downloader", DownloaderDestination),
     ComposeItem("NestedScrolling", NestedScrollingDestination),
