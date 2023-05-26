@@ -70,7 +70,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
 
     implementation 'androidx.constraintlayout:constraintlayout-compose:1.0.1'
-//    implementation 'androidx.navigation:navigation-compose:2.5.3'
+    implementation 'androidx.navigation:navigation-compose:2.5.3'
+    implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.6.1'
 
     //compose-destination
     implementation 'io.github.raamcosta.compose-destinations:animations-core:1.8.41-beta'

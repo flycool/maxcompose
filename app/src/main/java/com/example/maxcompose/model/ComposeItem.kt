@@ -36,6 +36,8 @@ val composeItemList2 = listOf(
 //    ComposeItem("AudioRecorder", AudioRecorderDestination),//to fix
 
 
+    ComposeItem("ImageViewPager", ImageViewPagerDestination),
+    ComposeItem("PermissionScreen", PermissionScreenDestination),
     ComposeItem("RetrofitAnnotation", RetrofitAnnotationDestination),
     ComposeItem("NetworkConnectivityScreen", NetworkConnectivityScreenDestination),
     ComposeItem("HorizontalPagerSample", HorizontalPagerSampleDestination),
